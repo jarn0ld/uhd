@@ -16,6 +16,8 @@ void export_filters(py::module& m)
     using filter_info_type   = filter_info_base::filter_type;
     using analog_filter_base = uhd::analog_filter_base;
     using analog_filter_lp   = uhd::analog_filter_lp;
+    using digital_filter_base_i16 = uhd::digital_filter_base<int16_t>;
+    using digital_filter_fir_i16 = uhd::digital_filter_fir<int16_t>;
 
     py::enum_<filter_info_type>(m, "filter_type")
         .value("analog_low_pass", filter_info_base::ANALOG_LOW_PASS)
@@ -29,6 +31,7 @@ void export_filters(py::module& m)
         // Methods
         .def("is_bypassed", &filter_info_base::is_bypassed)
         .def("get_type", &filter_info_base::get_type)
+        .def("get_position_index", &filter_info_base::get_position_index)
         .def("__str__", &filter_info_base::to_pp_string);
 
     py::class_<analog_filter_base, filter_info_base, analog_filter_base::sptr>(
@@ -46,6 +49,23 @@ void export_filters(py::module& m)
         .def("get_cutoff", &analog_filter_lp::get_cutoff)
         .def("get_rolloff", &analog_filter_lp::get_rolloff)
         .def("set_cutoff", &analog_filter_lp::set_cutoff);
+
+    py::class_<digital_filter_base_i16, filter_info_base, std::shared_ptr<digital_filter_base_i16>>(m, "digital_filter_base_i16")
+        .def(
+            py::init<filter_info_type, bool, size_t, double, size_t, size_t, double, size_t, const std::vector<int16_t>&>())
+
+        // Methods
+        .def("get_output_rate", &digital_filter_base_i16::get_output_rate)
+        .def("get_input_rate", &digital_filter_base_i16::get_input_rate)
+        .def("get_interpolation", &digital_filter_base_i16::get_interpolation)
+        .def("get_decimation", &digital_filter_base_i16::get_decimation)
+        .def("get_tap_full_scale", &digital_filter_base_i16::get_tap_full_scale)
+        .def("get_taps", &digital_filter_base_i16::get_taps);
+
+    py::class_<digital_filter_fir_i16, digital_filter_base_i16, std::shared_ptr<digital_filter_fir_i16>>(m, "digital_filter_fir_i16")
+        .def(
+            py::init<filter_info_type, bool, size_t, double, size_t, size_t, double, size_t, const std::vector<int16_t>&>());
+
 }
 
 #endif /* INCLUDED_UHD_FILTERS_PYTHON_HPP */

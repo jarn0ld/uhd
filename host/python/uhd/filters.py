@@ -14,3 +14,4 @@ FilterType = lib.filters.filter_type
 FilterInfoBase = lib.filters.filter_info_base
 AnalogFilterBase = lib.filters.analog_filter_base
 AnalogFilterLP = lib.filters.analog_filter_lp
+DigitalFilterBaseI16 = lib.filters.digital_filter_base_i16

@@ -42,6 +42,11 @@ public:
         return _type;
     }
 
+    UHD_INLINE size_t get_position_index()
+    {
+        return _position_index;
+    }
+
     virtual ~filter_info_base()
     {
         // NOP
